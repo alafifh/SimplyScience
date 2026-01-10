@@ -243,8 +243,8 @@ function ssGetSelectedInterests(){
 })();
 
 function ssApplyPrefs(){
-  const theme = localStorage.getItem("ss_theme") || "dark";
-  document.documentElement.setAttribute("data-theme", theme);
+  //const theme = localStorage.getItem("ss_theme") || "dark";
+  //document.documentElement.setAttribute("data-theme", theme);
 
   const font = localStorage.getItem("ss_font") || "system";
   const size = localStorage.getItem("ss_fontSize") || "16";
@@ -262,14 +262,13 @@ function ssApplyPrefs(){
 ssApplyPrefs();
 
 (function initSettingsPage(){
-  const toggleTheme = document.getElementById("toggleTheme");
   const fontFamily = document.getElementById("fontFamily");
   const fontSize = document.getElementById("fontSize");
   const fontSizeValue = document.getElementById("fontSizeValue");
   const logoutBtn = document.getElementById("logoutBtn");
   const msg = document.getElementById("settingsMsg");
 
-  if (!toggleTheme && !fontFamily && !fontSize && !logoutBtn) return;
+  if ( !fontFamily && !fontSize && !logoutBtn) return;
 
   // set current values
   const currentFont = localStorage.getItem("ss_font") || "system";
@@ -277,16 +276,6 @@ ssApplyPrefs();
   if (fontFamily) fontFamily.value = currentFont;
   if (fontSize) fontSize.value = currentSize;
   if (fontSizeValue) fontSizeValue.textContent = `Current: ${currentSize}px`;
-
-  if (toggleTheme) {
-    toggleTheme.addEventListener("click", () => {
-      const current = localStorage.getItem("ss_theme") || "dark";
-      const next = current === "dark" ? "light" : "dark";
-      localStorage.setItem("ss_theme", next);
-      ssApplyPrefs();
-      if (msg) msg.textContent = `Theme set to ${next}.`;
-    });
-  }
 
   if (fontFamily) {
     fontFamily.addEventListener("change", () => {
@@ -352,3 +341,4 @@ ssApplyPrefs();
     });
   });
 })();
+localStorage.removeItem("ss_theme");
