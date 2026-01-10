@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — Simply Science</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="phone page">
+      <div class="topbar">
+        <div class="dotrow">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <div class="battery" aria-hidden="true"></div>
+      </div>
+
+      <div class="screen">
+        <div class="card">
+          <div class="headerRow">
+            <a class="back" href="index.html" data-nav aria-label="Back to home">
+              ← Back
+            </a>
+          </div>
+
+          <h2 class="title">Welcome back</h2>
+          <p class="subtitle">Log in to continue learning.</p>
+
+          <form id="loginForm">
+            <div class="field">
+                <label for="email">Email</label>
+                <input class="input" id="email" type="email" placeholder="you@example.com" required />
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input class="input" id="password" type="password" placeholder="••••••••" required minlength="6" />
+            </div>
+
+            <div class="row">
+                <label class="checkbox">
+                    <input type="checkbox" />
+                    Remember me
+                </label>
+                <a class="smallLink" href="#" onclick="return false;">Forgot?</a>
+            </div>
+
+            <button class="btn btnPrimary" type="submit">Log In</button>
+
+            <div class="divider"></div>
+
+            <p class="note">
+                Don’t have an account?
+                <a href="signup.html" data-nav>Sign up</a>
+            </p>
+
+            <p class="note" id="loginMsg" style="margin-top:10px;"></p>
+          </form>
+
+        </div>
+
+        <div class="footerSpace"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

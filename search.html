@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search — Simply Science</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="phone page">
+      <div class="topbar">
+        <div class="dotrow"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="battery"></div>
+      </div>
+
+      <div class="screen">
+        <div class="card">
+          <h2 class="title">Search</h2>
+          <p class="subtitle">UI now. Backend PubMed search later.</p>
+
+          <div class="field">
+            <label for="q">Search papers</label>
+            <input class="input" id="q" placeholder="e.g., metformin longevity, CRISPR diabetes" />
+          </div>
+
+          <button class="btn btnPrimary" onclick="alert('Demo only — connect backend later!')">Search</button>
+
+          <div class="divider"></div>
+          <p class="note">Tip: when backend is ready, show results as the same “paper cards” as Home.</p>
+        </div>
+        <div class="footerSpace"></div>
+      </div>
+
+      <nav class="bottomNav">
+        <a class="navItem" href="home.html" data-nav><span class="navIcon">⌂</span><span>Home</span></a>
+        <a class="navItem active" href="search.html" data-nav><span class="navIcon">⌕</span><span>Search</span></a>
+        <a class="navItem" href="topics.html" data-nav><span class="navIcon">☰</span><span>Topics</span></a>
+        <a class="navItem" href="settings.html" data-nav><span class="navIcon">⚙</span><span>Settings</span></a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
