@@ -1,51 +1,26 @@
-import os
-import google.genai as genai
-from google.genai import types
-import time
+from AI_Func import * 
 
-from Bio import Entrez
+if __name__ == "__main__":
+    query = "Brain Cancer Research 2025"
+    pubmed_text = fetch_pubmed_abstracts(query)
 
-key = os.getenv("GEMINI_API_KEY2")
-client = genai.Client(api_key=key)
-
-Entrez.email = "your_email@example.com"
-
-def fetch_pubmed_abstracts(query, max_results=5):
-    handle = Entrez.esearch(db="pubmed", term=query, retmax=max_results)
-    record = Entrez.read(handle)
-    handle.close()
-
-    ids = record["IdList"]
-    if not ids:
-        return "No articles found."
-
-    handle = Entrez.efetch(
-        db="pubmed",
-        id=",".join(ids),
-        rettype="abstract",
-        retmode="text"
+    # Create ONE Gemini chat session (free-tier)
+    chat = client.chats.create(
+        model="models/gemini-flash-lite-latest"
     )
-    abstracts = handle.read()
-    handle.close()
 
-    return abstracts
+    # Extract structured claims
+    extract_claims(pubmed_text, query, chat)
 
-# Fetch PubMed data
-query = "Brain Cancer Research 2026"
-pubmed_text = fetch_pubmed_abstracts(query)
+    # Display facts
+    print(query)
+    facts = get_facts()
+    for f in facts:
+        print(f"{f['category']}: {f['text']} (Evidence: {f['evidence']})\n")
 
-# Create ONE chat (use free-tier model)
-chat = client.chats.create(
-    model="models/gemini-flash-lite-latest"
-)
-
-# Send PubMed abstracts
-response = chat.send_message(
-    f"These are PubMed abstracts about {query}:\n\n{pubmed_text}\n\n"
-    "Summarize the key findings in bullet points for clarity." 
-    "Make it around 200 words."
-    "Only use verified information from the abstracts. Only use studies with a clinically significant sample size." 
-    "At the end, add the primary soucrces used. Also add the number of articles referenced for each point at the end of the bullet."
-)
-
-print(response.text)
+    # Example: show sources for first claim
+    if facts:
+        first_id = facts[0]["id"]
+        sources = get_sources(first_id)
+        print("=== Sources for this claim ===")
+        print(sources)
