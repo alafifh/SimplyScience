@@ -27,36 +27,37 @@
           <h2 class="title">Welcome back</h2>
           <p class="subtitle">Log in to continue learning.</p>
 
-          <form data-demo>
-            <div class="field">
-              <label for="email">Email</label>
-              <input class="input" id="email" type="email" placeholder="you@example.com" required />
-            </div>
+          <form id="loginForm">
+  <div class="field">
+    <label for="email">Email</label>
+    <input class="input" id="email" type="email" placeholder="you@example.com" required />
+  </div>
 
-            <div class="field">
-              <label for="password">Password</label>
-              <input class="input" id="password" type="password" placeholder="••••••••" required minlength="6" />
-            </div>
+  <div class="field">
+    <label for="password">Password</label>
+    <input class="input" id="password" type="password" placeholder="••••••••" required minlength="6" />
+  </div>
 
-            <div class="row">
-              <label class="checkbox">
-                <input type="checkbox" />
-                Remember me
-              </label>
-              <a class="smallLink" href="#" onclick="return false;">Forgot?</a>
-            </div>
+  <div class="row">
+    <label class="checkbox">
+      <input type="checkbox" />
+      Remember me
+    </label>
+    <a class="smallLink" href="#" onclick="return false;">Forgot?</a>
+  </div>
 
-            <button class="btn btnPrimary" type="submit">Log In</button>
+  <button class="btn btnPrimary" type="submit">Log In</button>
 
-            <div class="divider"></div>
+  <div class="divider"></div>
 
-            <p class="note">
-              Don’t have an account?
-              <a href="signup.html" data-nav>Sign up</a>
-            </p>
+  <p class="note">
+    Don’t have an account?
+    <a href="signup.html" data-nav>Sign up</a>
+  </p>
 
-            <p class="note" data-msg style="margin-top:10px;"></p>
-          </form>
+  <p class="note" id="loginMsg" style="margin-top:10px;"></p>
+</form>
+
         </div>
 
         <div class="footerSpace"></div>
@@ -67,4 +68,5 @@
   <script src="app.js"></script>
 </body>
 </html>
+
 
