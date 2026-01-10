@@ -44,7 +44,6 @@ document.addEventListener("submit", (e) => {
     msg.textContent = "✅ Submitted (demo). Hook this to your backend later!";
   }
 });
-
 function ssGetProfile(){
   try { return JSON.parse(localStorage.getItem("ss_profile") || "null"); }
   catch { return null; }
@@ -205,7 +204,6 @@ function ssGetSelectedInterests(){
         try { return JSON.parse(localStorage.getItem("ss_profile") || "null"); }
         catch { return null; }
       })();
-        localStorage.setItem("ss_logged_in", "true");
 
       // ✅ After Log In → onboarding automatically (if profile missing)
       if (!profile) {
@@ -216,129 +214,3 @@ function ssGetSelectedInterests(){
     }, 250);
   });
 })();
-(function initSignupRedirect(){
-  const form = document.getElementById("signupForm");
-  if (!form) return;
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const msg = document.getElementById("signupMsg");
-    if (msg) msg.textContent = "Creating account…";
-
-    // Demo: backend will replace this
-    setTimeout(() => {
-      if (msg) msg.textContent = "✅ Account created. Redirecting to login…";
-      setTimeout(() => (window.location.href = "login.html"), 350);
-    }, 250);
-  });
-})();
-
-(function authGuard(){
-  const onHome = !!document.getElementById("feed");
-  if (!onHome) return;
-
-  const loggedIn = localStorage.getItem("ss_logged_in") === "true";
-  if (!loggedIn) window.location.href = "login.html";
-})();
-
-function ssApplyPrefs(){
-  //const theme = localStorage.getItem("ss_theme") || "dark";
-  //document.documentElement.setAttribute("data-theme", theme);
-
-  const font = localStorage.getItem("ss_font") || "system";
-  const size = localStorage.getItem("ss_fontSize") || "16";
-
-  const fontMap = {
-    system: 'ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial',
-    serif: 'ui-serif, Georgia, "Times New Roman", Times, serif',
-    mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
-  };
-
-  document.documentElement.style.setProperty("--font-family", fontMap[font] || fontMap.system);
-  document.documentElement.style.setProperty("--font-scale", `${size}px`);
-}
-
-ssApplyPrefs();
-
-(function initSettingsPage(){
-  const fontFamily = document.getElementById("fontFamily");
-  const fontSize = document.getElementById("fontSize");
-  const fontSizeValue = document.getElementById("fontSizeValue");
-  const logoutBtn = document.getElementById("logoutBtn");
-  const msg = document.getElementById("settingsMsg");
-
-  if ( !fontFamily && !fontSize && !logoutBtn) return;
-
-  // set current values
-  const currentFont = localStorage.getItem("ss_font") || "system";
-  const currentSize = localStorage.getItem("ss_fontSize") || "16";
-  if (fontFamily) fontFamily.value = currentFont;
-  if (fontSize) fontSize.value = currentSize;
-  if (fontSizeValue) fontSizeValue.textContent = `Current: ${currentSize}px`;
-
-  if (fontFamily) {
-    fontFamily.addEventListener("change", () => {
-      localStorage.setItem("ss_font", fontFamily.value);
-      ssApplyPrefs();
-      if (msg) msg.textContent = "Font updated.";
-    });
-  }
-
-  if (fontSize) {
-    fontSize.addEventListener("input", () => {
-      localStorage.setItem("ss_fontSize", fontSize.value);
-      ssApplyPrefs();
-      if (fontSizeValue) fontSizeValue.textContent = `Current: ${fontSize.value}px`;
-    });
-  }
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("ss_logged_in");
-      if (msg) msg.textContent = "Logged out.";
-      setTimeout(() => (window.location.href = "login.html"), 250);
-    });
-  }
-})();
-(function initTopicsSelection(){
-  const tiles = document.querySelectorAll(".topicTile");
-  if (!tiles.length) return;
-
-  const msg = document.getElementById("topicsMsg");
-
-  // load current interests
-  let profile = null;
-  try { profile = JSON.parse(localStorage.getItem("ss_profile") || "null"); } catch {}
-  if (!profile) profile = { interests: [] };
-  if (!Array.isArray(profile.interests)) profile.interests = [];
-
-  const interests = new Set(profile.interests);
-
-  // mark selected
-  tiles.forEach(t => {
-    const topic = t.getAttribute("data-topic");
-    if (topic && interests.has(topic)) t.classList.add("selected");
-  });
-
-  tiles.forEach(tile => {
-    tile.addEventListener("click", () => {
-      const topic = tile.getAttribute("data-topic");
-      if (!topic) return;
-
-      if (interests.has(topic)) {
-        interests.delete(topic);
-        tile.classList.remove("selected");
-      } else {
-        interests.add(topic);
-        tile.classList.add("selected");
-      }
-
-      profile.interests = Array.from(interests);
-      localStorage.setItem("ss_profile", JSON.stringify(profile));
-
-      if (msg) msg.textContent = "Topics updated ✅ (Home feed can refresh based on these).";
-    });
-  });
-})();
-localStorage.removeItem("ss_theme");
