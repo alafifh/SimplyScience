@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onboarding — Simply Science</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="phone page">
+      <div class="topbar">
+        <div class="dotrow">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <div class="battery" aria-hidden="true"></div>
+      </div>
+
+      <div class="screen">
+        <div class="card">
+          <div class="headerRow">
+            <a class="back" href="index.html" data-nav>← Back</a>
+          </div>
+
+          <h2 class="title">Set up your feed</h2>
+          <p class="subtitle">This helps us show research you actually care about.</p>
+
+          <form id="onboardingForm">
+            <div class="field">
+              <label for="age">Age</label>
+              <input class="input" id="age" type="number" placeholder="e.g., 19" min="10" max="120" required />
+            </div>
+
+            <div class="field">
+              <label for="role">I am a…</label>
+              <select class="input" id="role" required>
+                <option value="" disabled selected>Select one</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="university">University</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Interests (pick a few)</label>
+              <div class="chips" id="interestChips">
+                <button class="chip" type="button" data-chip="Cardiology">Cardiology</button>
+                <button class="chip" type="button" data-chip="Diabetes">Diabetes</button>
+                <button class="chip" type="button" data-chip="Neuroscience">Neuroscience</button>
+                <button class="chip" type="button" data-chip="Cancer">Cancer</button>
+                <button class="chip" type="button" data-chip="Mental Health">Mental Health</button>
+                <button class="chip" type="button" data-chip="Nutrition">Nutrition</button>
+                <button class="chip" type="button" data-chip="Genetics">Genetics</button>
+                <button class="chip" type="button" data-chip="Public Health">Public Health</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="interestOther">Other interests (optional)</label>
+              <input class="input" id="interestOther" type="text" placeholder="e.g., microbiome, aging, pediatrics" />
+              <div class="helper">Separate with commas.</div>
+            </div>
+
+            <button class="btn btnPrimary" type="submit">Continue</button>
+
+            <p class="note" id="onboardingMsg" style="margin-top:10px;"></p>
+          </form>
+        </div>
+
+        <div class="footerSpace"></div>
+      </div>
+
+      <nav class="bottomNav" aria-label="Bottom navigation">
+        <a class="navItem" href="home.html" data-nav>
+          <span class="navIcon">⌂</span><span>Home</span>
+        </a>
+        <a class="navItem" href="search.html" data-nav>
+          <span class="navIcon">⌕</span><span>Search</span>
+        </a>
+        <a class="navItem" href="topics.html" data-nav>
+          <span class="navIcon">☰</span><span>Topics</span>
+        </a>
+        <a class="navItem" href="settings.html" data-nav>
+          <span class="navIcon">⚙</span><span>Settings</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="app-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+

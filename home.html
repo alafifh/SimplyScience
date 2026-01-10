@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home — Simply Science</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="phone page">
+      <div class="topbar">
+        <div class="dotrow">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <div class="battery" aria-hidden="true"></div>
+      </div>
+
+      <div class="screen">
+        <div class="card">
+          <div class="headerRow">
+            <div>
+              <div class="title" style="margin:0;">Latest research</div>
+              <div class="subtitle" style="margin:6px 0 0;">Based on your interests</div>
+            </div>
+            <a class="smallLink" href="onboarding.html" data-nav>Edit</a>
+          </div>
+
+          <div class="feedControls">
+            <div class="pill" id="interestPill">Loading…</div>
+          </div>
+
+          <div id="feed" class="feedList"></div>
+
+          <div class="divider"></div>
+
+          <p class="note">
+            Your partner’s backend can replace this with PubMed results + AI summaries later.
+          </p>
+        </div>
+
+        <div class="footerSpace"></div>
+      </div>
+
+      <nav class="bottomNav" aria-label="Bottom navigation">
+        <a class="navItem active" href="home.html" data-nav>
+          <span class="navIcon">⌂</span><span>Home</span>
+        </a>
+        <a class="navItem" href="search.html" data-nav>
+          <span class="navIcon">⌕</span><span>Search</span>
+        </a>
+        <a class="navItem" href="topics.html" data-nav>
+          <span class="navIcon">☰</span><span>Topics</span>
+        </a>
+        <a class="navItem" href="settings.html" data-nav>
+          <span class="navIcon">⚙</span><span>Settings</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="app-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

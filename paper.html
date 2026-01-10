@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paper — Simply Science</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="phone page">
+      <div class="topbar">
+        <div class="dotrow">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <div class="battery" aria-hidden="true"></div>
+      </div>
+
+      <div class="screen">
+        <div class="card">
+          <div class="headerRow">
+            <a class="back" href="home.html" data-nav>← Back</a>
+            <a class="smallLink" href="#" id="openPubMed" target="_blank" rel="noreferrer">Open</a>
+          </div>
+
+          <h2 class="title" id="paperTitle">Loading…</h2>
+          <p class="subtitle" id="paperMeta"></p>
+
+          <div class="section">
+            <div class="sectionTitle">Abstract</div>
+            <p class="sectionBody" id="paperAbstract"></p>
+          </div>
+
+          <div class="section">
+            <div class="sectionTitle">
+              AI lay summary <span class="badge">coming from backend</span>
+            </div>
+            <div class="skeleton" style="height:12px"></div>
+            <div class="skeleton" style="height:12px; width:92%"></div>
+            <div class="skeleton" style="height:12px; width:86%"></div>
+            <p class="helper" style="margin-top:10px;">
+              This will display the model’s plain-language summary once your partner connects PubMed + the summarizer.
+            </p>
+          </div>
+
+          <div class="section">
+            <div class="sectionTitle">
+              Conflicts of interest <span class="badge">coming from backend</span>
+            </div>
+            <p class="sectionBody helper">
+              Placeholder: “No COI reported” or a parsed COI statement.
+            </p>
+          </div>
+        </div>
+
+        <div class="footerSpace"></div>
+      </div>
+
+      <nav class="bottomNav" aria-label="Bottom navigation">
+        <a class="navItem" href="home.html" data-nav><span class="navIcon">⌂</span><span>Home</span></a>
+        <a class="navItem" href="search.html" data-nav><span class="navIcon">⌕</span><span>Search</span></a>
+        <a class="navItem" href="topics.html" data-nav><span class="navIcon">☰</span><span>Topics</span></a>
+        <a class="navItem" href="settings.html" data-nav><span class="navIcon">⚙</span><span>Settings</span></a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="app-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
