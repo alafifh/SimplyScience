@@ -42,8 +42,10 @@ chat = client.chats.create(
 # Send PubMed abstracts
 response = chat.send_message(
     f"These are PubMed abstracts about {query}:\n\n{pubmed_text}\n\n"
-    "Summarize the key findings in simple langauge." 
+    "Summarize the key findings in bullet points for clarity." 
     "Make it around 200 words."
+    "Only use verified information from the abstracts. Only use studies with a clinically significant sample size." 
+    "At the end, add the primary soucrces used. Also add the number of articles referenced for each point at the end of the bullet."
 )
 
 print(response.text)
