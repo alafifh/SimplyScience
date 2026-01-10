@@ -16,21 +16,59 @@
 
       <div class="screen">
         <div class="card">
-          <h2 class="title">Topics</h2>
-          <p class="subtitle">Pick what you want to follow.</p>
+          <h2 class="title">Hot Topics</h2>
+          <p class="subtitle">Trending areas in science right now</p>
 
-          <div class="chips" style="margin-top:10px;">
-            <button class="chip" type="button">Cardiology</button>
-            <button class="chip" type="button">Diabetes</button>
-            <button class="chip" type="button">Neuroscience</button>
-            <button class="chip" type="button">Cancer</button>
-            <button class="chip" type="button">Nutrition</button>
-            <button class="chip" type="button">Genetics</button>
+          <div class="topicGrid">
+            <button class="topicTile" type="button" data-topic="AI in Medicine" style="--img:url('https://picsum.photos/seed/aimed/600/600')">
+              <span>AI in Medicine</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Longevity" style="--img:url('https://picsum.photos/seed/longevity/600/600')">
+              <span>Longevity</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Microbiome" style="--img:url('https://picsum.photos/seed/microbiome/600/600')">
+              <span>Microbiome</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Mental Health" style="--img:url('https://picsum.photos/seed/mentalhealth/600/600')">
+              <span>Mental Health</span>
+            </button>
           </div>
 
           <div class="divider"></div>
-          <p class="note">Later: this page can update interests and refresh the feed.</p>
+
+          <h2 class="title" style="margin-top:6px;">Other topics</h2>
+          <p class="subtitle">Build your personalized feed</p>
+
+          <div class="topicGrid">
+            <button class="topicTile" type="button" data-topic="Cardiology" style="--img:url('https://picsum.photos/seed/cardiology/600/600')">
+              <span>Cardiology</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Diabetes" style="--img:url('https://picsum.photos/seed/diabetes/600/600')">
+              <span>Diabetes</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Neuroscience" style="--img:url('https://picsum.photos/seed/neuro/600/600')">
+              <span>Neuroscience</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Cancer" style="--img:url('https://picsum.photos/seed/cancer/600/600')">
+              <span>Cancer</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Nutrition" style="--img:url('https://picsum.photos/seed/nutrition/600/600')">
+              <span>Nutrition</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Genetics" style="--img:url('https://picsum.photos/seed/genetics/600/600')">
+              <span>Genetics</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Public Health" style="--img:url('https://picsum.photos/seed/publichealth/600/600')">
+              <span>Public Health</span>
+            </button>
+            <button class="topicTile" type="button" data-topic="Immunology" style="--img:url('https://picsum.photos/seed/immunology/600/600')">
+              <span>Immunology</span>
+            </button>
+          </div>
+
+          <p class="note" id="topicsMsg" style="margin-top:12px;"></p>
         </div>
+
         <div class="footerSpace"></div>
       </div>
 
