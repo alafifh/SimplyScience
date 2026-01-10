@@ -493,3 +493,42 @@ label{
 .navIcon{
   font-size: 1.05rem;
 }
+/* ===== iPhone fit + safe scrolling ===== */
+.phone{
+  height: min(860px, 92vh);         /* “phone” stays phone-sized */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make the middle scrollable */
+.screen{
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 90px;            /* space so content isn’t hidden behind bottom nav */
+}
+
+/* Keep bottom nav always visible */
+.bottomNav{
+  flex-shrink: 0;
+}
+/* Make <select> match your inputs */
+select.input{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 42px; /* room for arrow */
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.75) 50%),
+    linear-gradient(135deg, rgba(255,255,255,0.75) 50%, transparent 50%),
+    linear-gradient(to right, transparent, transparent);
+  background-position:
+    calc(100% - 22px) 50%,
+    calc(100% - 16px) 50%,
+    0 0;
+  background-size: 6px 6px, 6px 6px, 100% 100%;
+  background-repeat: no-repeat;
+}
+select.input option{
+  color: #0f2027; /* readable in dropdown list */
+}
