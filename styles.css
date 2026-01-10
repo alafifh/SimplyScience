@@ -20,20 +20,16 @@
   --radius: 22px;
 }
 
-:root{
-  --font-scale: 16px;
-  --font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-}
-
-
-
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
 body{
-  font-family: var(--font-family);
-  font-size: var(--font-scale);
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color: var(--text);
+  background: radial-gradient(1000px 650px at 20% 15%, rgba(255,213,74,0.18), transparent 55%),
+              linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+  overflow-x:hidden;
 }
-
 
 /* ===== Mobile app shell ===== */
 .app{
@@ -47,17 +43,14 @@ body{
 
 .phone{
   width: min(430px, 100%);
-  height: min(860px, 92vh);        /* iPhone-friendly */
   border-radius: 34px;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
   box-shadow: var(--shadow);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  overflow: hidden;                /* keep rounded corners clean */
-  position: relative;
-  display: flex;
-  flex-direction: column;          /* topbar + scroll + bottom nav */
+  overflow:hidden;
+  position:relative;
 }
 
 /* subtle “status bar” */
@@ -97,12 +90,7 @@ body{
 /* ===== Content card ===== */
 .screen{
   padding: 18px 18px 22px;
-  overflow-y: auto;                /* ✅ scroll inside phone */
-  -webkit-overflow-scrolling: touch;
-  flex: 1;                         /* take remaining height */
-  padding-bottom: 90px;            /* space so bottom nav doesn't cover content */
 }
-
 
 .card{
   background: var(--card);
@@ -273,21 +261,7 @@ label{
   box-shadow: 0 0 0 4px rgba(255,213,74,0.16);
   transform: translateY(-1px);
 }
-/* nicer select styling */
-.select{
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.8) 50%),
-    linear-gradient(135deg, rgba(255,255,255,0.8) 50%, transparent 50%);
-  background-position:
-    calc(100% - 18px) 50%,
-    calc(100% - 12px) 50%;
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
-  padding-right: 38px;
-}
+
 .row{
   display:flex;
   align-items:center;
@@ -487,12 +461,16 @@ label{
 
 /* ===== Bottom nav ===== */
 .bottomNav{
-  position: absolute;
-  left: 0;
-  right: 0;
+  position: sticky;
   bottom: 0;
+  display:flex;
+  justify-content:space-around;
+  gap: 6px;
+  padding: 12px 10px;
+  background: rgba(0,0,0,0.28);
+  border-top: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(10px);
 }
-
 .navItem{
   flex: 1;
   display:flex;
@@ -514,44 +492,4 @@ label{
 }
 .navIcon{
   font-size: 1.05rem;
-}
-.topicGrid{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.topicTile{
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 18px;          /* slightly square */
-  height: 110px;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.55)),
-    var(--img) center/cover no-repeat;
-  color: rgba(255,255,255,0.95);
-  cursor:pointer;
-  position:relative;
-  overflow:hidden;
-  transition: transform 160ms ease, border-color 160ms ease;
-}
-
-.topicTile span{
-  position:absolute;
-  left: 12px;
-  bottom: 12px;
-  right: 12px;
-  font-weight: 700;
-  text-shadow: 0 10px 22px rgba(0,0,0,0.55);
-  letter-spacing: 0.1px;
-}
-
-.topicTile:hover{
-  transform: translateY(-1px);
-  border-color: rgba(255,213,74,0.55);
-}
-
-.topicTile.selected{
-  box-shadow: 0 0 0 4px rgba(255,213,74,0.14);
-  border-color: rgba(255,213,74,0.65);
 }

@@ -17,47 +17,25 @@
       <div class="screen">
         <div class="card">
           <h2 class="title">Settings</h2>
-          <p class="subtitle">Accessibility + account preferences</p>
+          <p class="subtitle">Accessibility features (planned).</p>
 
           <div class="section">
-            <div class="sectionTitle">Theme</div>
-            <div class="row">
-              <span class="helper">Dark / Light mode</span>
-              <button class="btn btnGhost" type="button" id="toggleTheme">Toggle</button>
-            </div>
+            <div class="sectionTitle">Translation</div>
+            <p class="sectionBody helper">Placeholder toggle — connect later.</p>
+            <button class="btn btnGhost" type="button" onclick="alert('Demo only')">Enable translation</button>
           </div>
 
           <div class="section">
-            <div class="sectionTitle">Font</div>
-
-            <div class="field">
-              <label for="fontFamily">Font style</label>
-              <select class="input select" id="fontFamily">
-                <option value="system">System</option>
-                <option value="serif">Serif</option>
-                <option value="mono">Monospace</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="fontSize">Font size</label>
-              <input class="input" id="fontSize" type="range" min="14" max="20" step="1" />
-              <div class="helper" id="fontSizeValue"></div>
-            </div>
+            <div class="sectionTitle">Voice</div>
+            <p class="sectionBody helper">Placeholder toggle — connect later.</p>
+            <button class="btn btnGhost" type="button" onclick="alert('Demo only')">Enable voice</button>
           </div>
 
-          <div class="section">
-            <div class="sectionTitle">Account</div>
-            <button class="btn btnGhost" type="button" id="logoutBtn">Log out</button>
-            <p class="note" id="settingsMsg" style="margin-top:10px;"></p>
-          </div>
+          <div class="divider"></div>
 
-          <div class="section">
-            <div class="sectionTitle">Profile</div>
-            <button class="btn btnGhost" type="button" id="resetProfile">Reset onboarding</button>
-          </div>
+          <button class="btn btnGhost" type="button" id="resetProfile">Reset onboarding</button>
+          <p class="note" id="settingsMsg" style="margin-top:10px;"></p>
         </div>
-
         <div class="footerSpace"></div>
       </div>
 

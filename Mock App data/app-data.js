@@ -44,3 +44,4 @@ window.SS_PAPERS = [
       "Higher dietary fiber intake is associated with shifts in microbiome composition and lower systemic inflammation markers in observational cohorts...",
     pubmedUrl: "https://pubmed.ncbi.nlm.nih.gov/",
   },
+];

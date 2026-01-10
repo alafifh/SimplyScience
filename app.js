@@ -44,7 +44,6 @@ document.addEventListener("submit", (e) => {
     msg.textContent = "✅ Submitted (demo). Hook this to your backend later!";
   }
 });
-
 function ssGetProfile(){
   try { return JSON.parse(localStorage.getItem("ss_profile") || "null"); }
   catch { return null; }
@@ -188,3 +187,30 @@ function ssGetSelectedInterests(){
     localStorage.removeItem("ss_selected_paper");
     if (msg) msg.textContent = "Profile reset. Go to onboarding to set it up again.";
   });
+})();
+(function initLoginRedirect(){
+  const form = document.getElementById("loginForm");
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const msg = document.getElementById("loginMsg");
+    if (msg) msg.textContent = "Logging in…";
+
+    // Demo “success”: after real backend auth, replace this with your API call.
+    setTimeout(() => {
+      const profile = (() => {
+        try { return JSON.parse(localStorage.getItem("ss_profile") || "null"); }
+        catch { return null; }
+      })();
+
+      // ✅ After Log In → onboarding automatically (if profile missing)
+      if (!profile) {
+        window.location.href = "onboarding.html";
+      } else {
+        window.location.href = "home.html";
+      }
+    }, 250);
+  });
+})();
