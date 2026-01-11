@@ -21,7 +21,7 @@
 
           <div class="field">
             <label for="q">Search papers</label>
-            <input class="input" id="q" placeholder="e.g., brian, metformin longevity, CRISPR diabetes" />
+            <input class="input" id="q" placeholder="e.g., brain, metformin longevity, CRISPR diabetes" />
           </div>
 
           <button class="btn btnPrimary" id="searchBtn" type="button">Search</button>
@@ -47,6 +47,44 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
-</body>
-</html>
+  <script>
+    const analyzeBtn = document.getElementById("analyzeBtn");
+const resultsDiv = document.getElementById("results");
+  analyzeBtn.addEventListener("click", async () => {
+    const query = document.getElementById("q").value.trim();
+    if (!query) return alert("Please enter a search term!");
+  
+    resultsDiv.innerHTML = "<p>Loading...</p>";
+  
+    try {
+      const response = await fetch("/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query })
+      });
+  
+      if (!response.ok) throw new Error("Network response was not ok");
+  
+      const data = await response.json();
+  
+      if (data.error) {
+        resultsDiv.innerHTML = `<p>Error!!!: ${data.error}</p>`;
+        return;
+      }
+  
+      resultsDiv.innerHTML = data.length
+        ? data.map(f => `
+          <div class="claimCard">
+            <strong>${f.category}:</strong> ${f.text}
+          </div>
+        `).join("")
+        : "<p>No claims found.</p>";
+  
+    } catch (err) {
+      console.error(err);
+      resultsDiv.innerHTML = `<p>Error catch: ${err.message}</p>`;
+    }
+  });
+    </script>
+  </body>
+  </html>
