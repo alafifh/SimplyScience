@@ -3,11 +3,17 @@ import google.genai as genai
 from Bio import Entrez
 import json
 
+FRONTEND_ORIGIN = "https://alafifh.github.io"
+CORS_ALLOWED = [FRONTEND_ORIGIN]
+
+
 key = os.getenv("GEMINI_API_KEY2")
 client = genai.Client(api_key=key)
 chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
-Entrez.email = "your_email@example.com"  # NCBI requires an email
+Entrez.email = "mfatimac786@gmail.com"  # NCBI requires an email
+app = Flask(__name__)
+CORS(app, origins=CORS_ALLOWED)
 
 CLAIM_DB = {}  # store structured claims
 
@@ -103,3 +109,27 @@ def get_sources(claim_id):
         return "Claim not found"
     sources_str = ", ".join(claim["pmids"])
     return f"Sources: {sources_str}"
+
+    # ---------------- Routes ----------------
+@app.get("/health")
+def health():
+    return jsonify(ok=True)
+
+@app.post("/search")
+def search():
+    body = request.get_json(silent=True) or {}
+    query = (body.get("query") or "").strip()
+    max_results = int(body.get("max_results") or 5)
+
+    if not query:
+        return jsonify(ok=False, error="No query provided"), 400
+
+    abstracts, pmids = fetch_pubmed_abstracts(query, max_results=max_results)
+    if not pmids:
+        return jsonify(ok=True, facts=[], message="No PubMed articles found."), 200
+
+    try:
+        extract_claims(abstracts, query)
+        return jsonify(ok=True, facts=get_facts())
+    except Exception as e:
+        return jsonify(ok=False, error=str(e)), 500
