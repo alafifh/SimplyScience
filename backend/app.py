@@ -8,6 +8,9 @@ from flask_cors import CORS
 FRONTEND_ORIGIN = "https://alafifh.github.io"
 CORS_ALLOWED = [FRONTEND_ORIGIN]
 app = Flask(__name__)
+if __name__ == "__main__":
+  app.run()
+  
 CORS(app, origins=CORS_ALLOWED)
 
 Entrez.email = "alafifhams@gmail.com"  # NCBI requires an email
@@ -110,11 +113,6 @@ def get_sources(claim_id):
     sources_str = ", ".join(claim["pmids"])
     return f"Sources: {sources_str}"
 
-
-    # ---------------- Routes ----------------
-@app.get("/health")
-def health():
-    return jsonify(ok=True)
 
 @app.post("/search")
 def search():
