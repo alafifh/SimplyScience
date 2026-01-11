@@ -214,3 +214,26 @@ function ssGetSelectedInterests(){
     }, 250);
   });
 })();
+async function fetchFeedFromBackend(query) {
+  const res = await fetch(`${API_BASE}/feed`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: query,
+      max_results: 5
+    })
+  });
+
+  const data = await res.json();
+  if (!data.ok) throw new Error("Feed failed");
+  return data.facts;
+}
+document.getElementById("searchBtn").addEventListener("click", async () => {
+  const q = document.getElementById("q").value.trim();
+  if (!q) return;
+
+  const facts = await fetchFeedFromBackend(q);
+
+  // render facts into UI
+  console.log(facts);
+});
