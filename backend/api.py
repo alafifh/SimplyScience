@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from backend.app import (
+from AI_Func import (
     client,
     fetch_pubmed_abstracts,
     extract_claims,
