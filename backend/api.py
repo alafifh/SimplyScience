@@ -1,6 +1,5 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from AI_Func import (
     client,
@@ -10,51 +9,31 @@ from AI_Func import (
     CLAIM_DB,
 )
 
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://alafifh.github.io"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# -------- Request schema --------
-class FeedRequest(BaseModel):
-    query: str
-    max_results: int = 5
+app = Flask(__name__)
+CORS(app, origins=["https://alafifh.github.io"])
 
 @app.get("/health")
 def health():
-    return {"ok": True}
+    return jsonify(ok=True)
 
-@app.post("/feed")
-def feed(req: FeedRequest):
-    """
-    USER provides the query.
-    """
-    query = req.query.strip()
+@app.post("/search")
+def search():
+    data = request.get_json(silent=True) or {}
+    query = (data.get("query") or "").strip()
+    max_results = int(data.get("max_results") or 5)
+
     if not query:
-        raise HTTPException(status_code=400, detail="Query is required")
+        return jsonify(ok=False, error="No query provided"), 400
 
-    # 1) Fetch PubMed abstracts
-    pubmed_text = fetch_pubmed_abstracts(query, max_results=req.max_results)
+    pubmed_text = fetch_pubmed_abstracts(query, max_results=max_results)
 
-    # 2) Create Gemini chat session
-    chat = client.chats.create(
-        model="models/gemini-flash-lite-latest"
-    )
+    # ✅ Create Gemini chat session (THIS fixes your crash)
+    chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
-    # 3) Clear old claims (VERY important)
+    # ✅ Prevent mixing results between requests
     CLAIM_DB.clear()
 
-    # 4) Run AI extraction
     extract_claims(pubmed_text, query, chat)
-
-    # 5) Return structured facts
     facts = get_facts()
-    return {
-        "ok": True,
-        "query": query,
-        "facts": facts
-    }
+
+    return jsonify(ok=True, facts=facts)
