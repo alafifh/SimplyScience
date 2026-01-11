@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SearchT — Simply Science</title>
+  <title>Search — Simply Science</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -24,7 +24,7 @@
             <input class="input" id="q" placeholder="e.g., metformin longevity, CRISPR diabetes" />
           </div>
 
-          <button class="btn btnPrimary" id="searchBtn">Search</button>
+          <button class="btn btnSecondary" id="analyzeBtn">Analyze Papers</button>
 
           <div class="divider"></div>
           <div id="results"></div>
@@ -42,45 +42,44 @@
   </div>
 
   <script>
-    const searchBtn = document.getElementById("searchBtn");
-    const resultsDiv = document.getElementById("results");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+const resultsDiv = document.getElementById("results");
 
-    searchBtn.addEventListener("click", async () => {
-      const query = document.getElementById("q").value.trim();
-      if (!query) return alert("Please enter a search term!");
+analyzeBtn.addEventListener("click", async () => {
+  const query = document.getElementById("q").value.trim();
+  if (!query) return alert("Please enter a search term!");
 
-      resultsDiv.innerHTML = "<p>Loading...</p>";
+  resultsDiv.innerHTML = "<p>Loading...</p>";
 
-      try {
-        const response = await fetch("/search", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query })
-        });
-
-        if (!response.ok) throw new Error("Network response was not ok");
-
-        const data = await response.json();
-
-        if (data.error) {
-          resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
-          return;
-        }
-
-        // Display each claim nicely
-        resultsDiv.innerHTML = data.length
-          ? data.map(f => `
-            <div class="claimCard">
-              <strong>${f.category}:</strong> ${f.text}
-            </div>
-          `).join("")
-          : "<p>No claims found.</p>";
-
-      } catch (err) {
-        console.error(err);
-        resultsDiv.innerHTML = `<p>Error: ${err.message}</p>`;
-      }
+  try {
+    const response = await fetch("/search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query })
     });
+
+    if (!response.ok) throw new Error("Network response was not ok");
+
+    const data = await response.json();
+
+    if (data.error) {
+      resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+      return;
+    }
+
+    resultsDiv.innerHTML = data.length
+      ? data.map(f => `
+        <div class="claimCard">
+          <strong>${f.category}:</strong> ${f.text}
+        </div>
+      `).join("")
+      : "<p>No claims found.</p>";
+
+  } catch (err) {
+    console.error(err);
+    resultsDiv.innerHTML = `<p>Error: ${err.message}</p>`;
+  }
+});
   </script>
 </body>
 </html>
