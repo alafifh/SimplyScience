@@ -1,4 +1,4 @@
-from AI_Func import * 
+from backend.app import * 
 
 query = "effects of intermittent fasting on metabolic health"
 pubmed_text = fetch_pubmed_abstracts(query)
