@@ -5,6 +5,7 @@ import json
 
 key = os.getenv("GEMINI_API_KEY2")
 client = genai.Client(api_key=key)
+chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
 Entrez.email = "your_email@example.com"  # NCBI requires an email
 
