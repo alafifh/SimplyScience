@@ -1,4 +1,4 @@
-const API_BASE = "https://YOUR-BACKEND-URL.onrender.com";
+const API_BASE = "https://simply-science.onrender.com/";
 
 // Button ripple
 document.addEventListener("click", (e) => {
