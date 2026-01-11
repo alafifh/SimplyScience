@@ -12,7 +12,7 @@ key = os.getenv("GEMINI_API_KEY2")
 client = genai.Client(api_key=key)
 chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
-Entrez.email = "mfatimac786@gmail.com"  # NCBI requires an email
+Entrez.email = "alafifhams@gmail.com"  # NCBI requires an email
 app = Flask(__name__)
 CORS(app, origins=CORS_ALLOWED)
 
