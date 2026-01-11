@@ -1,34 +1,17 @@
-from flask import Flask, render_template, request, jsonify
-import json
+from flask import Flask, request, jsonify
+from AI_Func import * 
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template("searchtest.html")
-
 @app.route('/search', methods=['POST'])
 def search():
-    query = request.json.get("query")
+    data = request.get_json()
+    query = data.get('query')
     if not query:
-        return jsonify({"error": "No search term provided"}), 400
+        return jsonify({"error": "No query provided"}), 400
 
-    # Fetch abstracts
-    abstracts = fetch_pubmed_abstracts(query, max_results=5)
+    pubmed_text = fetch_pubmed_abstracts(query)
+    extract_claims(pubmed_text, query, chat)  # `chat` = your Gemini client chat
 
-    # Create a Gemini chat
-    chat = client.chats.create(model="models/gemini-flash-lite-latest")
-    
-    # Extract claims into CLAIM_DB
-    extract_claims(abstracts, query, chat)
-
-    # Return facts for frontend display
-    facts = get_facts()
+    facts = get_facts()  # Return all high/moderate evidence facts
     return jsonify(facts)
-
-@app.route('/sources/<claim_id>')
-def sources(claim_id):
-    return jsonify({"sources": get_sources(claim_id)})
-
-if __name__ == "__main__":
-    app.run(debug=True)

@@ -52,6 +52,7 @@
       resultsDiv.innerHTML = "<p>Loading...</p>";
 
       try {
+        // Make a POST request to your Flask backend
         const response = await fetch("/search", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -67,7 +68,7 @@
           return;
         }
 
-        // Display each claim nicely
+        // Display the returned claims
         resultsDiv.innerHTML = data.length
           ? data.map(f => `
             <div class="claimCard">
