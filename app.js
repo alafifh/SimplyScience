@@ -1,4 +1,4 @@
-const API_BASE = "https://simply-science.onrender.com";
+const API_BASE = "https://simply-science.onrender.com/";
 
 // Button ripple
 document.addEventListener("click", (e) => {
@@ -217,7 +217,7 @@ function ssGetSelectedInterests(){
   });
 })();
 async function fetchFeedFromBackend(query) {
-  const res = await fetch(`${API_BASE}/api/search`, {
+  const res = await fetch(`${API_BASE}/feed`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -240,7 +240,7 @@ document.getElementById("searchBtn").addEventListener("click", async () => {
   console.log(facts);
 });
 async function ssFetchFacts(query) {
-  const res = await fetch(`${API_BASE}/api/search`, {
+  const res = await fetch(`${API_BASE}/feed`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, max_results: 5 })
@@ -287,7 +287,7 @@ async function ssFetchFacts(query) {
         <div class="paperCard">
           <div class="paperTop">
             <div class="topicTag">${escapeHtml(f.category || "Claim")}</div>
-            <div class="helper">ID: ${escapeHtml(f.id || "")}</div>
+            <div class="helper">${escapeHtml(f.evidence || "")}</div>
           </div>
           <div class="paperTitle">${escapeHtml(f.text || "")}</div>
           <p class="paperMeta">Claim ID: ${escapeHtml(f.id || "")}</p>
