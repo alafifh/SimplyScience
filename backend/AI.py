@@ -1,11 +1,11 @@
-from backend.app import * 
+from app import * 
 
 query = "effects of intermittent fasting on metabolic health"
 pubmed_text = fetch_pubmed_abstracts(query)
 
 print ()
 print ()
-extract_claims(pubmed_text, query, chat)
+extract_claims(pubmed_text, query)
 print ()
 print ()
 facts = get_facts()
