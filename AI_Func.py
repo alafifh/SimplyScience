@@ -99,7 +99,6 @@ def get_facts(category=None):
 def get_sources(claim_id):
     claim = CLAIM_DB.get(claim_id)
     if not claim:
-        return {"error": "Claim not found"}
-    return {
-        "Sources": claim["pmids"]
-    }
+        return "Claim not found"
+    sources_str = ", ".join(claim["pmids"])
+    return f"Sources: {sources_str}"

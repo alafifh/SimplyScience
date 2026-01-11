@@ -1,6 +1,6 @@
 from AI_Func import * 
 
-query = "Brain Cancer Research 2025"
+query = "effects of intermittent fasting on metabolic health"
 pubmed_text = fetch_pubmed_abstracts(query)
 
 chat = client.chats.create(model="models/gemini-flash-lite-latest")
