@@ -8,11 +8,11 @@ from flask_cors import CORS
 FRONTEND_ORIGIN = "https://alafifh.github.io"
 CORS_ALLOWED = [FRONTEND_ORIGIN]
 
+Entrez.email = "alafifhams@gmail.com"  # NCBI requires an email
 key = os.getenv("GEMINI_API_KEY2")
 client = genai.Client(api_key=key)
 chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
-Entrez.email = "alafifhams@gmail.com"  # NCBI requires an email
 app = Flask(__name__)
 CORS(app, origins=CORS_ALLOWED)
 
@@ -110,6 +110,7 @@ def get_sources(claim_id):
         return "Claim not found"
     sources_str = ", ".join(claim["pmids"])
     return f"Sources: {sources_str}"
+
 
     # ---------------- Routes ----------------
 @app.get("/health")
