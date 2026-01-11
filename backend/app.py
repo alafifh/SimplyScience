@@ -2,7 +2,7 @@ import os
 import json
 import google.genai as genai
 from Bio import Entrez
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
 FRONTEND_ORIGIN = "https://alafifh.github.io"
@@ -36,9 +36,9 @@ def fetch_pubmed_abstracts(query, max_results=5):
     abstracts = handle.read()
     handle.close()
 
-    return abstracts
+    return abstracts, ids
 
-def extract_claims(pubmed_text, query, chat):
+def extract_claims(pubmed_text, query):
     """
     Send abstracts to Gemini and store (high/moderate) claims in CLAIM_DB.
     """
@@ -126,6 +126,26 @@ def search():
     if not query:
         return jsonify(ok=False, error="No query provided"), 400
 
+    abstracts, pmids = fetch_pubmed_abstracts(query, max_results=max_results)
+    if not pmids:
+        return jsonify(ok=True, facts=[], message="No PubMed articles found."), 200
+
+    try:
+        extract_claims(abstracts, query)
+        return jsonify(ok=True, facts=get_facts())
+    except Exception as e:
+        return jsonify(ok=False, error=str(e)), 500
+    
+@app.get("/")
+def home():
+    return render_template("index.html")
+
+@app.get("/search")
+def search_page():
+    return render_template("search.html")
+
+@app.post("/api/search")
+def api_search():
     abstracts, pmids = fetch_pubmed_abstracts(query, max_results=max_results)
     if not pmids:
         return jsonify(ok=True, facts=[], message="No PubMed articles found."), 200
