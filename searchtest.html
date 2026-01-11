@@ -63,7 +63,7 @@ analyzeBtn.addEventListener("click", async () => {
     const data = await response.json();
 
     if (data.error) {
-      resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+      resultsDiv.innerHTML = `<p>Error!!!: ${data.error}</p>`;
       return;
     }
 
