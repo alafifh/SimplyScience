@@ -43,6 +43,7 @@ Instructions:
 - Group articles by theme.
 - Summarize findings using clear bullet points with several sentences (~150 words each).
 - Each bullet must contain only ONE primary claim.
+- Use language that the average high school student can understand.
 
 Evidence rules:
 - Use only peer-reviewed studies from reputable institutions.
@@ -83,9 +84,7 @@ Do not include ```json in output
 
 def get_facts(category=None):
     """
-    Return a list of claims for display.
-    Does NOT include evidence info.
-    """
+    Return a list of claims for display. No sources here.    """
     output = []
     for claim in CLAIM_DB.values():
         if category and claim["category"] != category:
@@ -98,13 +97,9 @@ def get_facts(category=None):
     return output
 
 def get_sources(claim_id):
-    """
-    Return sources for a specific claim.
-    """
     claim = CLAIM_DB.get(claim_id)
     if not claim:
         return {"error": "Claim not found"}
     return {
-        "claim_text": claim["claim_text"],
-        "pmids": claim["pmids"]
+        "Sources": claim["pmids"]
     }
