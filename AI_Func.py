@@ -1,16 +1,14 @@
 import os
 import google.genai as genai
-from google.genai import types
-import time
-import json
 from Bio import Entrez
+import json
 
 key = os.getenv("GEMINI_API_KEY2")
 client = genai.Client(api_key=key)
 
-Entrez.email = "your_email@example.com" #email for NCBI database access
+Entrez.email = "your_email@example.com"  # NCBI requires an email
 
-CLAIM_DB = {} #database for claims
+CLAIM_DB = {}  # store structured claims
 
 def fetch_pubmed_abstracts(query, max_results=5):
     handle = Entrez.esearch(db="pubmed", term=query, retmax=max_results)
@@ -32,10 +30,9 @@ def fetch_pubmed_abstracts(query, max_results=5):
 
     return abstracts
 
-
 def extract_claims(pubmed_text, query, chat):
     """
-    Send abstracts to Gemini and store structured HIGH-EVIDENCE claims in CLAIM_DB
+    Send abstracts to Gemini and store (high/moderate) claims in CLAIM_DB.
     """
     prompt = f"""
 Analyze the following PubMed abstracts related to {query}:
@@ -44,69 +41,65 @@ Analyze the following PubMed abstracts related to {query}:
 Instructions:
 - Only include studies directly related to {query}.
 - Group articles by theme.
-- Summarize findings using clear bullet points (~200 words total).
+- Summarize findings using clear bullet points with several sentences (~150 words each).
 - Each bullet must contain only ONE primary claim.
 
 Evidence rules:
 - Use only peer-reviewed studies from reputable institutions.
 - Prefer clinically meaningful sample sizes.
-- Only include HIGH-confidence findings.
 - Do not infer beyond the abstracts.
 
-For each bullet point:
-- Label as [Molecular], [Clinical], or [Epidemiological]
-- End with: Articles Referenced: N
-
-Output JSON ONLY. Do NOT include backticks or extra text.
-Return as a list of objects with fields:
+Output JSON ONLY, list of claims with fields:
 - claim_id
 - claim_text
-- category
 - evidence_strength (High / Moderate / Preliminary)
 - pmids (list of PMIDs used)
-"""
 
+[
+  {{
+    "claim_id": "unique_id_here",
+    "claim_text": "Main claim text from the abstract",
+    "category": "Molecular / Clinical / Epidemiological",
+    "evidence_strength": "High / Moderate / Preliminary",
+    "pmids": ["list_of_PMIDs_used"]
+  }}
+]
+Do not include ```json in output
+
+"""
     response = chat.send_message(prompt)
 
     try:
         claims = json.loads(response.text)
-        if isinstance(claims, str):
-            claims = json.loads(claims)
-        if not isinstance(claims, list):
-            print("Unexpected Gemini format, expected a list of claims.")
-            print(response.text)
-            return
     except json.JSONDecodeError:
-        print("Error parsing Gemini output. Raw response:")
+        print("Error. Raw response:")
         print(response.text)
         return
 
+    # Store only high-evidence claims
     for c in claims:
-        if not isinstance(c, dict):
-            continue
-        if c.get("evidence_strength") == "High":
+        if c.get("evidence_strength") == "High" or "Moderate":
             CLAIM_DB[c["claim_id"]] = c
 
-
-
 def get_facts(category=None):
+    """
+    Return a list of claims for display.
+    Does NOT include evidence info.
+    """
     output = []
     for claim in CLAIM_DB.values():
         if category and claim["category"] != category:
             continue
-        if claim.get("evidence_strength") != "High":
-            continue
         output.append({
             "id": claim["claim_id"],
             "text": claim["claim_text"],
-            "category": claim["category"],
-            "evidence": claim.get("evidence_strength", "Unknown")  # <-- add this line
+            "category": claim["category"]
         })
     return output
 
 def get_sources(claim_id):
     """
-    Return PMIDs for a specific claim
+    Return sources for a specific claim.
     """
     claim = CLAIM_DB.get(claim_id)
     if not claim:
