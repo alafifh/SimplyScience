@@ -1,7 +1,9 @@
 import os
+import json
 import google.genai as genai
 from Bio import Entrez
-import json
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 FRONTEND_ORIGIN = "https://alafifh.github.io"
 CORS_ALLOWED = [FRONTEND_ORIGIN]
