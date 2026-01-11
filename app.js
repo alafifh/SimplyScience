@@ -1,3 +1,5 @@
+const API_BASE = "https://YOUR-BACKEND-URL.onrender.com";
+
 // Button ripple
 document.addEventListener("click", (e) => {
   const btn = e.target.closest(".btn");
@@ -237,3 +239,78 @@ document.getElementById("searchBtn").addEventListener("click", async () => {
   // render facts into UI
   console.log(facts);
 });
+async function ssFetchFacts(query) {
+  const res = await fetch(`${API_BASE}/feed`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query, max_results: 5 })
+  });
+
+  // If CORS or server errors happen, this may throw
+  const data = await res.json();
+  if (!data.ok) {
+    throw new Error(data.error || "Backend returned ok=false");
+  }
+  return data.facts || [];
+}
+
+(function initSearchPage() {
+  const btn = document.getElementById("searchBtn");
+  const input = document.getElementById("q");
+  const status = document.getElementById("searchStatus");
+  const results = document.getElementById("searchResults");
+
+  if (!btn || !input || !results) return; // not on search page
+
+  btn.addEventListener("click", async () => {
+    const q = input.value.trim();
+    results.innerHTML = "";
+    if (!q) {
+      if (status) status.textContent = "Type a topic (e.g., diabetes, brain cancer, sleep).";
+      return;
+    }
+
+    try {
+      if (status) status.textContent = "Searching PubMed + generating claims…";
+      btn.disabled = true;
+
+      const facts = await ssFetchFacts(q);
+
+      if (!facts.length) {
+        if (status) status.textContent = "No high-evidence claims returned. Try a broader query.";
+        return;
+      }
+
+      if (status) status.textContent = `Results for: ${q}`;
+
+      results.innerHTML = facts.map(f => `
+        <div class="paperCard">
+          <div class="paperTop">
+            <div class="topicTag">${escapeHtml(f.category || "Claim")}</div>
+            <div class="helper">${escapeHtml(f.evidence || "")}</div>
+          </div>
+          <div class="paperTitle">${escapeHtml(f.text || "")}</div>
+          <p class="paperMeta">Claim ID: ${escapeHtml(f.id || "")}</p>
+        </div>
+      `).join("");
+    } catch (err) {
+      if (status) status.textContent = `Error: ${err.message}`;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // Enter key triggers search
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") btn.click();
+  });
+})();
+
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
