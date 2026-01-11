@@ -8,7 +8,6 @@ from flask_cors import CORS
 FRONTEND_ORIGIN = "https://alafifh.github.io"
 CORS_ALLOWED = [FRONTEND_ORIGIN]
 
-
 key = os.getenv("GEMINI_API_KEY2")
 client = genai.Client(api_key=key)
 chat = client.chats.create(model="models/gemini-flash-lite-latest")
