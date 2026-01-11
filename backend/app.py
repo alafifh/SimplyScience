@@ -7,14 +7,13 @@ from flask_cors import CORS
 
 FRONTEND_ORIGIN = "https://alafifh.github.io"
 CORS_ALLOWED = [FRONTEND_ORIGIN]
+app = Flask(__name__)
+CORS(app, origins=CORS_ALLOWED)
 
 Entrez.email = "alafifhams@gmail.com"  # NCBI requires an email
 key = os.getenv("GEMINI_API_KEY2")
 client = genai.Client(api_key=key)
 chat = client.chats.create(model="models/gemini-flash-lite-latest")
-
-app = Flask(__name__)
-CORS(app, origins=CORS_ALLOWED)
 
 CLAIM_DB = {}  # store structured claims
 
