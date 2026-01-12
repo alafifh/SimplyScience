@@ -1,6 +1,6 @@
-from backend.app import * 
+from app import * 
 
-query = "effects of intermittent fasting on metabolic health"
+query = "gauss's law"
 pubmed_text = fetch_pubmed_abstracts(query)
 
 print ()
