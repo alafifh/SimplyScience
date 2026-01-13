@@ -2,17 +2,6 @@ import os
 import json
 import google.genai as genai
 from Bio import Entrez
-from flask import Flask, request, jsonify, url_for, redirect
-from flask_cors import CORS
-
-FRONTEND_ORIGIN = "https://alafifh.github.io"
-CORS_ALLOWED = [FRONTEND_ORIGIN]
-app = Flask(__name__) #flask setup
-
-if __name__ == "__main__":
-#app.run()
-
-CORS(app, origins=CORS_ALLOWED)
 
 Entrez.email = "alafifhams@gmail.com"  # NCBI requires an email
 key = os.getenv("GEMINI_API_KEY2")
@@ -113,23 +102,3 @@ def get_sources(claim_id):
         return "Claim not found"
     sources_str = ", ".join(claim["pmids"])
     return f"Sources: {sources_str}"
-
-
-@app.post("/search")
-def search():
-    body = request.get_json(silent=True) or {}
-    query = (body.get("query") or "").strip()
-    max_results = int(body.get("max_results") or 5)
-
-    if not query:
-        return jsonify(ok=False, error="No query provided"), 400
-
-    abstracts, pmids = fetch_pubmed_abstracts(query, max_results=max_results)
-    if not pmids:
-        return jsonify(ok=True, facts=[], message="No PubMed articles found."), 200
-
-    try:
-        extract_claims(abstracts, query)
-        return jsonify(ok=True, facts=get_facts())
-    except Exception as e:
-        return jsonify(ok=False, error=str(e)), 500
