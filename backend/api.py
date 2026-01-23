@@ -12,6 +12,20 @@ from AI_Func import (
 app = Flask(__name__)
 CORS(app, origins=["https://alafifh.github.io"])
 
+@app.route('/search', methods=['GET'])
+def search():
+    pubmed_text = fetch_pubmed_abstracts(query, max_results=max_results)
+
+    chat = client.chats.create(model="models/gemini-flash-lite-latest")
+
+    CLAIM_DB.clear()
+
+    extract_claims(pubmed_text, query, chat)
+    facts = get_facts()
+
+    return jsonify(ok=True, facts=facts)
+
+'''
 @app.get("/health")
 def health():
     return jsonify(ok=True)
@@ -27,13 +41,12 @@ def search():
 
     pubmed_text = fetch_pubmed_abstracts(query, max_results=max_results)
 
-    # ✅ Create Gemini chat session (THIS fixes your crash)
     chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
-    # ✅ Prevent mixing results between requests
     CLAIM_DB.clear()
 
     extract_claims(pubmed_text, query, chat)
     facts = get_facts()
 
     return jsonify(ok=True, facts=facts)
+'''
