@@ -1,13 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
-from AI_Func import (
-    client,
-    fetch_pubmed_abstracts,
-    extract_claims,
-    get_facts,
-    CLAIM_DB,
-)
+from app import fetch_pubmed_abstracts, extract_claims, get_facts, get_sources, CLAIM_DB
+from AI import query, max_results, client, chat
 
 app = Flask(__name__)
 CORS(app, origins=["https://alafifh.github.io"])

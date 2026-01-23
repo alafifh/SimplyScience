@@ -1,4 +1,4 @@
-from app import * 
+from app import fetch_pubmed_abstracts, extract_claims, get_facts, get_sources, chat
 
 query = "gauss's law"
 pubmed_text = fetch_pubmed_abstracts(query)

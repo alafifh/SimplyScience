@@ -5,8 +5,6 @@ from Bio import Entrez
 from flask import Flask, request, jsonify, url_for, redirect
 from flask_cors import CORS
 
-app = Flask(__name__) #flask setup
-
 Entrez.email = "alafifhams@gmail.com"  # NCBI requires an email
 key = os.getenv("GEMINI_API_KEY2")
 client = genai.Client(api_key=key)
