@@ -1,14 +1,15 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from app import fetch_pubmed_abstracts, extract_claims, get_facts, get_sources, CLAIM_DB, chat 
-from AI import query, max_results, client
+from app import fetch_pubmed_abstracts, extract_claims, get_facts, get_sources, CLAIM_DB, chat, client
 
 app = Flask(__name__)
 CORS(app, origins=["https://alafifh.github.io"])
+query = "gauss's law"
+pubmed_text = fetch_pubmed_abstracts(query)
 
 @app.route('/search', methods=['GET'])
 def search():
-    pubmed_text = fetch_pubmed_abstracts(query, max_results=max_results)
+    pubmed_text = fetch_pubmed_abstracts(query)
 
     chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
@@ -16,6 +17,12 @@ def search():
 
     extract_claims(pubmed_text, query, chat)
     facts = get_facts()
+    for f in facts:
+        print(f"{f['category']}: {f['text']}")
+        if facts:
+            first_id = facts[0]["id"]
+            sources = get_sources(first_id)
+            print(sources)
 
     return jsonify(ok=True, facts=facts)
 
