@@ -1,106 +1,55 @@
-import os
-import json
-import google.genai as genai
-from Bio import Entrez
-from flask import Flask, request, jsonify, url_for, redirect
+from flask import Flask, request, jsonify
 from flask_cors import CORS
+from functions import fetch_pubmed_abstracts, extract_claims, get_facts, get_sources, CLAIM_DB, chat, client
 
-Entrez.email = "alafifhams@gmail.com"  # NCBI requires an email
-key = os.getenv("GEMINI_API_KEY2")
-client = genai.Client(api_key=key)
-chat = client.chats.create(model="models/gemini-flash-lite-latest")
+app = Flask(__name__) #flask setup
 
-CLAIM_DB = {}  # store structured claims
+# CORS(app, origins=["https://alafifh.github.io"]) trying without CORS for now
 
-def fetch_pubmed_abstracts(query, max_results=5):
-    handle = Entrez.esearch(db="pubmed", term=query, retmax=max_results)
-    record = Entrez.read(handle)
-    handle.close()
+query = "gauss's law"
+pubmed_text = fetch_pubmed_abstracts(query)
 
-    ids = record["IdList"]
-    if not ids:
-        return "No articles found."
+@app.route('/search', methods=['GET'])
+def search():
+    pubmed_text = fetch_pubmed_abstracts(query)
 
-    handle = Entrez.efetch(
-        db="pubmed",
-        id=",".join(ids),
-        rettype="abstract",
-        retmode="text"
-    )
-    abstracts = handle.read()
-    handle.close()
+    chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
-    return abstracts
+    CLAIM_DB.clear()
 
-def extract_claims(pubmed_text, query, chat):
-    """
-    Send abstracts to Gemini and store (high/moderate) claims in CLAIM_DB.
-    """
-    prompt = f"""
-Analyze the following PubMed abstracts related to {query}:
-{pubmed_text}
+    extract_claims(pubmed_text, query, chat)
+    facts = get_facts()
+    for f in facts:
+        print(f"{f['category']}: {f['text']}")
+        if facts:
+            first_id = facts[0]["id"]
+            sources = get_sources(first_id)
+            print(sources)
 
-Instructions:
-- Only include studies directly related to {query}.
-- Group articles by theme.
-- Summarize findings using clear bullet points with several sentences (~150 words each).
-- Each bullet must contain only ONE primary claim.
-- Use language that the average high school student can understand.
+    return jsonify(ok=True, facts=facts)
 
-Evidence rules:
-- Use only peer-reviewed studies from reputable institutions.
-- Prefer clinically meaningful sample sizes.
-- Do not infer beyond the abstracts.
+'''
+@app.get("/health")
+def health():
+    return jsonify(ok=True)
 
-Output JSON ONLY, list of claims with fields:
-- claim_id
-- claim_text
-- evidence_strength (High / Moderate / Preliminary)
-- pmids (list of PMIDs used)
+@app.post("/search")
+def search():
+    data = request.get_json(silent=True) or {}
+    query = (data.get("query") or "").strip()
+    max_results = int(data.get("max_results") or 5)
 
-[
-  {{
-    "claim_id": "unique_id_here",
-    "claim_text": "Main claim text from the abstract",
-    "category": "Molecular / Clinical / Epidemiological",
-    "evidence_strength": "High / Moderate / Preliminary",
-    "pmids": ["list_of_PMIDs_used"]
-  }}
-]
-Do not include ```json in output
+    if not query:
+        return jsonify(ok=False, error="No query provided"), 400
 
-"""
-    response = chat.send_message(prompt)
+    pubmed_text = fetch_pubmed_abstracts(query, max_results=max_results)
 
-    try:
-        claims = json.loads(response.text)
-    except json.JSONDecodeError:
-        print("Error. Raw response:")
-        print(response.text)
-        return
+    chat = client.chats.create(model="models/gemini-flash-lite-latest")
 
-    # Store only high-evidence claims
-    for c in claims:
-        if c.get("evidence_strength") == "High" or "Moderate":
-            CLAIM_DB[c["claim_id"]] = c
+    CLAIM_DB.clear()
 
-def get_facts(category=None):
-    """
-    Return a list of claims for display. No sources here.    """
-    output = []
-    for claim in CLAIM_DB.values():
-        if category and claim["category"] != category:
-            continue
-        output.append({
-            "id": claim["claim_id"],
-            "text": claim["claim_text"],
-            "category": claim["category"]
-        })
-    return output
+    extract_claims(pubmed_text, query, chat)
+    facts = get_facts()
 
-def get_sources(claim_id):
-    claim = CLAIM_DB.get(claim_id)
-    if not claim:
-        return "Claim not found"
-    sources_str = ", ".join(claim["pmids"])
-    return f"Sources: {sources_str}"
+    return jsonify(ok=True, facts=facts)
+'''
